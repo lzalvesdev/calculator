@@ -22,6 +22,15 @@ class Calculator {
 
   // Process all calculator operations
   processOperation(operation) {
+    // Check if current is empty
+    if (this.currentOperationText.innerText === "" && operation !== "C") {
+      // Change operation
+      if (this.previousOperationText.innerText !== "") {
+        this.changeOperation(operation);
+      }
+      return;
+    }
+
     // Get current and preevious value
     let operationValue;
     const previous = +this.previousOperationText.innerText.split(" ")[0];
@@ -31,6 +40,30 @@ class Calculator {
       case "+":
         operationValue = previous + current;
         this.updateScreen(operationValue, operation, current, previous);
+        break;
+      case "-":
+        operationValue = previous - current;
+        this.updateScreen(operationValue, operation, current, previous);
+        break;
+      case "*":
+        operationValue = previous * current;
+        this.updateScreen(operationValue, operation, current, previous);
+        break;
+      case "/":
+        operationValue = previous / current;
+        this.updateScreen(operationValue, operation, current, previous);
+        break;
+      case "DEL":
+        this.processDelOperator();
+        break;
+      case "CE":
+        this.processClearCurrentOperation();
+        break;
+      case "C":
+        this.processClearAllOperation();
+        break;
+      case "=":
+        this.processEqualOperation();
         break;
       default:
         return;
@@ -56,6 +89,40 @@ class Calculator {
       this.previousOperationText.innerText = `${operationValue} ${operation}`;
       this.currentOperationText.innerText = "";
     }
+  }
+
+  // Change math operation
+
+  changeOperation(operation) {
+    const mathOperation = ["*", "+", "-", "/"];
+
+    if (!mathOperation.includes(operation)) {
+      return;
+    }
+
+    this.previousOperationText.innerText =
+      this.previousOperationText.innerText.slice(0, -1) + operation;
+  }
+
+  // Delete the last digit
+  processDelOperator() {
+    this.currentOperationText.innerText =
+      this.currentOperationText.innerText.slice(0, -1);
+  }
+  // Clear current operation
+  processClearCurrentOperation() {
+    this.currentOperationText.innerText = "";
+  }
+  // Clear ALL operation
+  processClearAllOperation() {
+    this.currentOperationText.innerText = "";
+    this.previousOperationText.innerText = "";
+  }
+  // Equal operation
+  processEqualOperation() {
+    const operation = previousOperationText.innerText.split(" ")[1];
+
+    this.processOperation(operation);
   }
 }
 
