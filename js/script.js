@@ -24,7 +24,7 @@ class Calculator {
   processOperation(operation) {
     // Get current and preevious value
     let operationValue;
-    const previous = +this.previousOperationText.innerText;
+    const previous = +this.previousOperationText.innerText.split(" ")[0];
     const current = +this.currentOperationText.innerText;
 
     switch (operation) {
