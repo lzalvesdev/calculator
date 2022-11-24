@@ -8,6 +8,7 @@ class Calculator {
     this.currentOperationText = currentOperationText;
     this.currentOperation = "";
   }
+
   // add digit to calculator screen
   addDigit(digit) {
     // check if current operation already has a dot
@@ -16,12 +17,45 @@ class Calculator {
     }
 
     this.currentOperation = digit;
-    this.updatescreen();
+    this.updateScreen();
+  }
+
+  // Process all calculator operations
+  processOperation(operation) {
+    // Get current and preevious value
+    let operationValue;
+    const previous = +this.previousOperationText.innerText;
+    const current = +this.currentOperationText.innerText;
+
+    switch (operation) {
+      case "+":
+        operationValue = previous + current;
+        this.updateScreen(operationValue, operation, current, previous);
+        break;
+      default:
+        return;
+    }
   }
 
   // Change values of the calc screen
-  updatescreen() {
-    this.currentOperationText.innerText += this.currentOperation;
+  updateScreen(
+    operationValue = null,
+    operation = null,
+    current = null,
+    previous = null
+  ) {
+    if (operationValue === null) {
+      this.currentOperationText.innerText += this.currentOperation;
+    } else {
+      // Check if value is zero, if it is just add current value
+      if (previous === 0) {
+        operationValue = current;
+      }
+
+      // Add current value to previous
+      this.previousOperationText.innerText = `${operationValue} ${operation}`;
+      this.currentOperationText.innerText = "";
+    }
   }
 }
 
@@ -34,7 +68,7 @@ buttons.forEach((btn) => {
     if (+value >= 0 || value === ".") {
       calc.addDigit(value);
     } else {
-      console.log("op: " + value);
+      calc.processOperation(value);
     }
   });
 });
